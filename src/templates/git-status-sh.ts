@@ -1,4 +1,4 @@
-export function statusSh(): string {
+export function gitStatusSh(): string {
   return `#!/usr/bin/env bash
 # Reports git branch and uncommitted changes for every repo under repos/,
 # plus any active worktrees per repo. Run from anywhere inside the metarepo.

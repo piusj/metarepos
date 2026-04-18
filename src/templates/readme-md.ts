@@ -39,15 +39,15 @@ node scripts/init-repos.mjs
 
 Edit \`metarepo.config.json\` to add or remove repos, then re-run the command. It only touches missing entries.
 
-## Status across all repos
+## Git status across all repos
 
 \`\`\`bash
-bash scripts/status.sh
+bash scripts/git-status.sh
 \`\`\`
 
 Prints a colour-coded summary of each repo under \`repos/\` plus any active worktrees under \`.worktrees/\`: current branch, ahead/behind upstream, staged/modified/untracked counts. Useful for checking the state of coordinated cross-repo work at a glance.
 
-**Tip:** If you're using Claude Code, you can turn this script into a skill by creating \`.claude/skills/metarepo-status/SKILL.md\` that invokes \`bash scripts/status.sh\` — then just say "check status" to trigger it.
+**Tip:** If you're using Claude Code, you can turn this script into a skill by creating \`.claude/skills/metarepo-git-status/SKILL.md\` that invokes \`bash scripts/git-status.sh\` — then just say "check git status" to trigger it.
 
 ## Open in VSCode
 

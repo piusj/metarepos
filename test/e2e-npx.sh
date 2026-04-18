@@ -70,9 +70,9 @@ check_file "$META/.gitignore"
 check_file "$META/metarepo.config.json"
 check_file "$META/meta.code-workspace"
 check_file "$META/scripts/init-repos.mjs"
-check_file "$META/scripts/status.sh"
-if [ ! -x "$META/scripts/status.sh" ]; then
-  echo "FAIL: scripts/status.sh not executable" >&2
+check_file "$META/scripts/git-status.sh"
+if [ ! -x "$META/scripts/git-status.sh" ]; then
+  echo "FAIL: scripts/git-status.sh not executable" >&2
   exit 1
 fi
 check_dir  "$META/.git"
