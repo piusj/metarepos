@@ -68,9 +68,10 @@ export async function runInitProgrammatic(args: InitProgrammaticInput): Promise<
       {
         title: "Create target directory",
         task: async (ctx, task) => {
-          await createTargetDirectory({ metarepoPath: ctx.metarepoPath });
-          task.title = `Create target directory ${chalk.dim(ctx.metarepoPath)}`;
-          ctx.createdCount += 1;
+          const result = await createTargetDirectory({ metarepoPath: ctx.metarepoPath });
+          task.title = `Create target directory ${chalk.dim(ctx.metarepoPath)} ${chalk.dim(`(${result.status})`)}`;
+          if (result.status === "created") ctx.createdCount++;
+          else ctx.skippedCount++;
         },
       },
       {
