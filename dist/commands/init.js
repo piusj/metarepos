@@ -11,6 +11,7 @@ import { mergeConfig } from "../scripts/06-merge-config.js";
 import { writeStatusScript } from "../scripts/09-write-status-script.js";
 import { runGitInit } from "../scripts/07-run-git-init.js";
 import { runInitRepos } from "../scripts/08-run-init-repos.js";
+import { writeCodeWorkspace } from "../scripts/10-write-code-workspace.js";
 import { printBanner, printSummary } from "../lib/logger.js";
 async function readExistingRepoNames(metarepoPath) {
     const cfg = join(metarepoPath, "metarepo.config.json");
@@ -112,6 +113,20 @@ export async function runInitProgrammatic(args) {
                     result.status === "created"
                         ? "Merge metarepo.config.json (created)"
                         : `Merge metarepo.config.json ${chalk.dim(`(+${result.addedCount}, ~${result.skippedCount})`)}`;
+            },
+        },
+        {
+            title: "Install meta.code-workspace",
+            task: async (ctx, task) => {
+                const { write } = await writeCodeWorkspace({
+                    metarepoPath: ctx.metarepoPath,
+                    name: ctx.name,
+                });
+                if (write.status === "created")
+                    ctx.createdCount++;
+                else
+                    ctx.skippedCount++;
+                task.title = `Install meta.code-workspace ${chalk.dim(`(${write.status})`)}`;
             },
         },
         {
