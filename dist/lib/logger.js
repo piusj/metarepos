@@ -61,3 +61,15 @@ export function printSummary(s) {
         }));
     console.log(chalk.dim(`\nMetarepo: ${chalk.bold(s.metarepoPath)}`));
 }
+export function printNextSteps(metarepoPath) {
+    const promptPath = `${metarepoPath}/META-ARCH-PROMPT.md`;
+    if (!isTTY) {
+        console.log(`Next: open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify it as needed.`);
+        return;
+    }
+    console.log("\n" +
+        chalk.cyan.bold("Next step") +
+        chalk.dim(" · ") +
+        `Open ${chalk.bold("META-ARCH-PROMPT.md")} and give it to your coding agent to map out\n` +
+        `           how your services fit together. Modify the generated result as needed.`);
+}

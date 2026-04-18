@@ -148,6 +148,8 @@ export async function runInitProgrammatic(args) {
         elapsedMs: Date.now() - start,
         metarepoPath,
     });
+    const { printNextSteps } = await import("../lib/logger.js");
+    printNextSteps(metarepoPath);
 }
 export async function runInitInteractive(cwd) {
     printBanner();
