@@ -8,6 +8,7 @@ import { createTargetDirectory } from "../scripts/03-create-target-directory.js"
 import { writeScaffoldFiles } from "../scripts/04-write-scaffold-files.js";
 import { writeInitReposScript } from "../scripts/05-write-init-repos-script.js";
 import { mergeConfig } from "../scripts/06-merge-config.js";
+import { writeStatusScript } from "../scripts/09-write-status-script.js";
 import { runGitInit } from "../scripts/07-run-git-init.js";
 import { runInitRepos } from "../scripts/08-run-init-repos.js";
 import { printBanner, printSummary } from "../lib/logger.js";
@@ -80,6 +81,17 @@ export async function runInitProgrammatic(args) {
                 else
                     ctx.skippedCount++;
                 task.title = `Install scripts/init-repos.mjs ${chalk.dim(`(${write.status})`)}`;
+            },
+        },
+        {
+            title: "Install scripts/status.sh",
+            task: async (ctx, task) => {
+                const { write } = await writeStatusScript({ metarepoPath: ctx.metarepoPath });
+                if (write.status === "created")
+                    ctx.createdCount++;
+                else
+                    ctx.skippedCount++;
+                task.title = `Install scripts/status.sh ${chalk.dim(`(${write.status})`)}`;
             },
         },
         {

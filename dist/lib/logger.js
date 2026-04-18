@@ -63,13 +63,21 @@ export function printSummary(s) {
 }
 export function printNextSteps(metarepoPath) {
     const promptPath = `${metarepoPath}/META-ARCH-PROMPT.md`;
+    const statusPath = `${metarepoPath}/scripts/status.sh`;
     if (!isTTY) {
-        console.log(`Next: open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify it as needed.`);
+        console.log(`Next:`);
+        console.log(`  1. Open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify the result as needed.`);
+        console.log(`  2. Run ${statusPath} any time for a cross-repo status report (branches + worktrees). Tip: wrap it as a Claude Code skill under .claude/skills/metarepo-status/ so "check status" triggers it.`);
         return;
     }
     console.log("\n" +
-        chalk.cyan.bold("Next step") +
-        chalk.dim(" · ") +
-        `Open ${chalk.bold("META-ARCH-PROMPT.md")} and give it to your coding agent to map out\n` +
-        `           how your services fit together. Modify the generated result as needed.`);
+        chalk.cyan.bold("Next steps") +
+        "\n" +
+        `  ${chalk.cyan("1.")} Open ${chalk.bold("META-ARCH-PROMPT.md")} and give it to your coding agent\n` +
+        `     to map out how your services fit together. Modify the result as needed.\n` +
+        "\n" +
+        `  ${chalk.cyan("2.")} Run ${chalk.bold("bash scripts/status.sh")} any time for a cross-repo\n` +
+        `     status report — branches, ahead/behind, uncommitted changes, and worktrees.\n` +
+        `     ${chalk.dim("Tip: wrap it as a Claude Code skill at ")}${chalk.bold(".claude/skills/metarepo-status/")}${chalk.dim(" so")}\n` +
+        `     ${chalk.dim(`\"check status\" triggers it automatically.`)}`);
 }
