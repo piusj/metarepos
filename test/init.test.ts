@@ -38,6 +38,23 @@ test("init scaffolds a metarepo with symlinked samples", async () => {
     assert.ok(await exists(join(metaPath, ".git")));
     assert.ok(await exists(join(metaPath, "repos/.gitkeep")));
 
+    assert.ok(await exists(join(metaPath, "meta.code-workspace")), "missing meta.code-workspace");
+
+    const workspace = JSON.parse(await readFile(join(metaPath, "meta.code-workspace"), "utf8"));
+    assert.ok(Array.isArray(workspace.folders), "workspace.folders should be an array");
+    assert.equal(workspace.folders.length, 3, "expected 3 folders: metarepo + 2 repos");
+    assert.equal(workspace.folders[0].path, ".", "first folder should be the metarepo root");
+    assert.equal(workspace.folders[0].name, "my-meta", "first folder name should be metarepo name");
+    assert.deepEqual(
+      workspace.folders.slice(1).map((f: { name: string }) => f.name).sort(),
+      ["api", "web"],
+    );
+    assert.deepEqual(
+      workspace.folders.slice(1).map((f: { path: string }) => f.path).sort(),
+      ["repos/api", "repos/web"],
+    );
+    assert.equal(workspace.settings["files.exclude"].repos, true);
+
     const statusPath = join(metaPath, "scripts/status.sh");
     const statusStat = await stat(statusPath);
     assert.ok((statusStat.mode & 0o100) !== 0, "status.sh should be executable");

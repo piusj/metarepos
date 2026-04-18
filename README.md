@@ -78,6 +78,7 @@ Answer file shape:
 ├── META-ARCH-PROMPT.md     # ready-to-use prompt for generating META-ARCH.md with your agent
 ├── README.md               # editable metarepo README
 ├── metarepo.config.json    # repo declarations
+├── meta.code-workspace     # VSCode multi-root workspace (one folder per repo)
 └── .gitignore
 ```
 
@@ -102,6 +103,20 @@ bash scripts/status.sh
 It prints a colour-coded summary of each repo under `repos/` plus any active worktrees under `.worktrees/` — current branch, ahead/behind upstream, staged/modified/untracked counts. Great for checking the state of coordinated cross-repo work at a glance.
 
 **Tip:** If you use Claude Code, you can wrap this script as a skill by adding `.claude/skills/metarepo-status/SKILL.md` that invokes `bash scripts/status.sh`. Then a simple "check status" prompt will trigger it.
+
+## Open in VSCode
+
+```bash
+code meta.code-workspace
+```
+
+Or in VSCode: **File → Open Workspace from File…** and select `meta.code-workspace`.
+
+The workspace registers the metarepo root plus each repo under `repos/` as separate workspace folders. Benefits:
+
+- **Cleaner VSCode UI without constraining the agent.** The editor shows one tree per repo, while the agent still operates against the full metarepo on disk.
+- **Per-folder include/exclude tuning.** Narrow VSCode's indexing and search to just the files you care about (e.g. only frontend, only backend) by editing per-folder `files.exclude` / `search.exclude` rules — without affecting what the agent can read.
+- **Clear separation between VSCode's view and the agent's view.** Useful when you want your editor scoped tightly but still want the agent to reason across every service.
 
 ## Contributing / local development
 

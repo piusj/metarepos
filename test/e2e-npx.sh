@@ -68,6 +68,7 @@ check_file "$META/CLAUDE.md"
 check_file "$META/README.md"
 check_file "$META/.gitignore"
 check_file "$META/metarepo.config.json"
+check_file "$META/meta.code-workspace"
 check_file "$META/scripts/init-repos.mjs"
 check_file "$META/scripts/status.sh"
 if [ ! -x "$META/scripts/status.sh" ]; then
@@ -96,6 +97,12 @@ fi
 symlink_count="$(node -e "console.log(JSON.parse(require('fs').readFileSync('$META/metarepo.config.json','utf8')).symlinks.length)")"
 if [ "$symlink_count" != "2" ]; then
   echo "FAIL: expected 2 symlink entries in config, got $symlink_count" >&2
+  exit 1
+fi
+
+ws_folders="$(node -e "console.log(JSON.parse(require('fs').readFileSync('$META/meta.code-workspace','utf8')).folders.length)")"
+if [ "$ws_folders" != "3" ]; then
+  echo "FAIL: meta.code-workspace should have 3 folders, got $ws_folders" >&2
   exit 1
 fi
 
