@@ -1,0 +1,5 @@
+node_modules/
+dist-test/
+*.log
+.DS_Store
+# NOTE: dist/ is intentionally committed so `npx piusj/metarepos` works without a build step.
