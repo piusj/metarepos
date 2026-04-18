@@ -24,6 +24,10 @@ export async function spawnWithForward(
       stdio: forward ? ["ignore", "pipe", "pipe"] : "inherit",
     });
 
+    let exitCodeCapture = 0;
+    child.on("error", rejectPromise);
+    child.on("exit", (code) => { exitCodeCapture = code ?? 0; });
+
     if (forward && child.stdout && child.stderr) {
       let outBuf = "";
       let errBuf = "";
@@ -48,10 +52,10 @@ export async function spawnWithForward(
       child.on("close", () => {
         if (outBuf) forward(outBuf);
         if (errBuf) forward(errBuf);
+        resolvePromise({ exitCode: exitCodeCapture });
       });
+    } else {
+      child.on("close", () => resolvePromise({ exitCode: exitCodeCapture }));
     }
-
-    child.on("error", rejectPromise);
-    child.on("exit", (code) => resolvePromise({ exitCode: code ?? 0 }));
   });
 }
