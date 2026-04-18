@@ -50,6 +50,7 @@ export async function promptRepos(
         const t = v.trim();
         if (!t) return "Name cannot be empty.";
         if (/[\/\\]/.test(t)) return "Name cannot contain slashes.";
+        if (/^\./.test(t)) return "Name cannot start with a dot.";
         if (taken.has(t)) return `Name "${t}" is already used.`;
         return true;
       },
