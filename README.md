@@ -25,6 +25,26 @@ You'll be prompted for:
 
 The CLI then writes the scaffold files, merges your answers into `metarepo.config.json`, runs `git init`, and runs `scripts/init-repos.mjs` to materialize your repos. Everything it does is idempotent; re-running is safe.
 
+### Non-interactive mode
+
+For CI or scripted setup, pass a JSON answers file:
+
+```bash
+npx -y piusj/metarepos init --config answers.json
+```
+
+Answer file shape:
+
+```json
+{
+  "name": "my-metarepo",
+  "repos": [
+    { "kind": "symlink", "name": "api", "path": "/absolute/path/to/api" },
+    { "kind": "clone", "name": "web", "url": "git@github.com:org/web.git" }
+  ]
+}
+```
+
 ## What gets generated
 
 ```

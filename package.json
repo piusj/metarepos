@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc && node -e \"import('node:fs').then(({default:fs})=>{const p='dist/cli.js';const s=fs.readFileSync(p,'utf8');if(!s.startsWith('#!'))fs.writeFileSync(p,'#!/usr/bin/env node\\n'+s);fs.chmodSync(p,0o755);})\"",
     "test": "npm run test:build && node --test 'dist-test/test/*.test.js'",
-    "test:build": "tsc -p tsconfig.test.json"
+    "test:build": "tsc -p tsconfig.test.json",
+    "test:e2e": "bash test/e2e-npx.sh"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
