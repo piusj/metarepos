@@ -4,10 +4,28 @@ A one-shot CLI that scaffolds a **metarepo** — a root folder grouping several 
 
 After running `metarepos init`, the CLI is no longer needed. The generated metarepo is yours to manage.
 
+## Why a metarepo?
+
+If your work spans several repos, coding agents like Claude Code can't see the bigger picture — each repo is just a working directory with no shared view of how the services relate, who depends on whom, or which branches belong together.
+
+A metarepo fixes that without forcing you to either extreme:
+
+- **Not a monorepo.** Repos keep their own history, ownership, CI, and deploy pipelines.
+- **Not a custom context MCP.** No server to build, host, or maintain — it's just a folder with symlinks (or clones) and a few markdown files.
+
+Once the shared-context lens is in place, the agent can:
+
+- Make coordinated changes across services in one flow — migrations, CI tweaks, infra updates, consumer patches — figuring out which repos to touch without being told.
+- Work across different languages, build tools, and test setups, adapting per repo.
+- Create matching branches (and optional worktrees) across every affected repo for a single feature or fix.
+- Open, review, and merge PRs per repo, then sequence the deploys.
+- Reason about how a change in one service will break others before you ship.
+
+Tested on real cross-cutting work including infra, CI/CD, and test changes.
+
 ## Prerequisites
 
 - **GitHub CLI (`gh`)** installed and authenticated (`gh auth status` succeeds). Needed when you clone SSH URLs through `scripts/init-repos.mjs`.
-- **Claude Code** installed and authenticated. The generated `AGENTS.md` / `CLAUDE.md` describe the metarepo layout and cross-repo conventions to it.
 - **Node.js ≥ 20** and **npm** installed (npm ships with Node; no npm account required for running `npx`).
 
 ## Usage
