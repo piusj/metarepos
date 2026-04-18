@@ -23,11 +23,11 @@ export function info(msg: string): void {
 }
 
 export function warn(msg: string): void {
-  console.log(`${logSymbols.warning} ${chalk.yellow(msg)}`);
+  console.warn(`${logSymbols.warning} ${chalk.yellow(msg)}`);
 }
 
 export function error(msg: string): void {
-  console.log(`${logSymbols.error} ${chalk.red(msg)}`);
+  console.error(`${logSymbols.error} ${chalk.red(msg)}`);
 }
 
 export function created(path: string): void {
@@ -47,6 +47,14 @@ export type Summary = {
 };
 
 export function printSummary(s: Summary): void {
+  if (!isTTY) {
+    console.log(
+      `Summary: created=${s.created} skipped=${s.skipped} warnings=${s.warnings} time=${(s.elapsedMs / 1000).toFixed(2)}s`,
+    );
+    console.log(`Metarepo: ${s.metarepoPath}`);
+    console.log("Edit metarepo.config.json and re-run node scripts/init-repos.mjs any time — it's idempotent.");
+    return;
+  }
   const table = new Table({
     chars: {
       top: "", "top-mid": "", "top-left": "", "top-right": "",
