@@ -32,11 +32,15 @@ test("init scaffolds a metarepo with symlinked samples", async () => {
     });
 
     // Files exist
-    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "META-ARCH-PROMPT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs"]) {
+    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "META-ARCH-PROMPT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs", "scripts/status.sh"]) {
       assert.ok(await exists(join(metaPath, f)), `missing ${f}`);
     }
     assert.ok(await exists(join(metaPath, ".git")));
     assert.ok(await exists(join(metaPath, "repos/.gitkeep")));
+
+    const statusPath = join(metaPath, "scripts/status.sh");
+    const statusStat = await stat(statusPath);
+    assert.ok((statusStat.mode & 0o100) !== 0, "status.sh should be executable");
 
     // META-ROOT.md interpolates name
     const metaRoot = await readFile(join(metaPath, "META-ROOT.md"), "utf8");

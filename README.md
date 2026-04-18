@@ -70,7 +70,8 @@ Answer file shape:
 ├── repos/                  # target for clones and symlinks
 ├── docs/                   # shared context, plans, designs
 ├── scripts/
-│   └── init-repos.mjs      # idempotent materializer (re-run any time)
+│   ├── init-repos.mjs      # idempotent materializer (re-run any time)
+│   └── status.sh           # cross-repo status report (branches + worktrees)
 ├── AGENTS.md               # main agent-context doc
 ├── CLAUDE.md               # one-liner pointing to AGENTS.md
 ├── META-ROOT.md            # metarepo-root marker
@@ -89,6 +90,18 @@ node scripts/init-repos.mjs
 ```
 
 The script only touches missing entries under `repos/`. It will never overwrite or remove existing ones.
+
+## Status across all repos
+
+From anywhere inside the metarepo, run:
+
+```bash
+bash scripts/status.sh
+```
+
+It prints a colour-coded summary of each repo under `repos/` plus any active worktrees under `.worktrees/` — current branch, ahead/behind upstream, staged/modified/untracked counts. Great for checking the state of coordinated cross-repo work at a glance.
+
+**Tip:** If you use Claude Code, you can wrap this script as a skill by adding `.claude/skills/metarepo-status/SKILL.md` that invokes `bash scripts/status.sh`. Then a simple "check status" prompt will trigger it.
 
 ## Contributing / local development
 

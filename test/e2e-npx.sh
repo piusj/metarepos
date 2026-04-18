@@ -69,6 +69,11 @@ check_file "$META/README.md"
 check_file "$META/.gitignore"
 check_file "$META/metarepo.config.json"
 check_file "$META/scripts/init-repos.mjs"
+check_file "$META/scripts/status.sh"
+if [ ! -x "$META/scripts/status.sh" ]; then
+  echo "FAIL: scripts/status.sh not executable" >&2
+  exit 1
+fi
 check_dir  "$META/.git"
 check_file "$META/repos/.gitkeep"
 
