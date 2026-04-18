@@ -1,5 +1,5 @@
 {
-  "name": "metarepos",
+  "name": "@piusj/metarepos",
   "version": "0.1.0",
   "description": "Scaffolder CLI for setting up a metarepo — a root folder grouping multiple repos with shared agent context.",
   "type": "module",
