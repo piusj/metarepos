@@ -10,8 +10,7 @@
     "test": "npm run test:build && node --test 'dist-test/test/*.test.js'",
     "test:build": "tsc -p tsconfig.test.json",
     "test:e2e": "bash test/e2e-npx.sh",
-    "prepublishOnly": "npm test && npm run build",
-    "deploy": "npm publish --access public"
+    "deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
