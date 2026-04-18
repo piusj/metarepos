@@ -63,8 +63,6 @@ export async function runInitProgrammatic(args: InitProgrammaticInput): Promise<
     skippedCount: 0,
   };
 
-  const primaryRenderer = (process.stdout.isTTY ? "default" : "verbose") as "default";
-
   const tasks = new Listr<Ctx, "default", "verbose">(
     [
       {
@@ -150,8 +148,8 @@ export async function runInitProgrammatic(args: InitProgrammaticInput): Promise<
         collapseSubtasks: false,
         showSubtasks: true,
       },
-      renderer: primaryRenderer,
-      fallbackRenderer: "verbose" as const,
+      renderer: "default",
+      fallbackRenderer: "verbose",
     },
   );
 
