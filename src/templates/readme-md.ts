@@ -28,6 +28,7 @@ Tested on real cross-cutting work including infra, CI/CD, and test changes.
 - \`docs/\` — shared context, plans, designs.
 - \`scripts/init-repos.mjs\` — idempotent materializer. Re-run after editing the config.
 - \`AGENTS.md\` / \`CLAUDE.md\` — instructions for coding agents.
+- \`META-ARCH-PROMPT.md\` — a ready-to-use prompt for generating a shared architecture doc with your coding agent.
 - \`META-ROOT.md\` — root marker file.
 
 ## Materializing repos

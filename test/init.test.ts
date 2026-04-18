@@ -32,7 +32,7 @@ test("init scaffolds a metarepo with symlinked samples", async () => {
     });
 
     // Files exist
-    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs"]) {
+    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "META-ARCH-PROMPT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs"]) {
       assert.ok(await exists(join(metaPath, f)), `missing ${f}`);
     }
     assert.ok(await exists(join(metaPath, ".git")));
@@ -41,6 +41,9 @@ test("init scaffolds a metarepo with symlinked samples", async () => {
     // META-ROOT.md interpolates name
     const metaRoot = await readFile(join(metaPath, "META-ROOT.md"), "utf8");
     assert.match(metaRoot, /root of the my-meta meta-repo/);
+
+    const archPrompt = await readFile(join(metaPath, "META-ARCH-PROMPT.md"), "utf8");
+    assert.match(archPrompt, /Metarepo Architecture Analysis/);
 
     // Config is correct
     const cfg = JSON.parse(await readFile(join(metaPath, "metarepo.config.json"), "utf8"));

@@ -17,6 +17,7 @@ A file named \`META-ROOT.md\` lives at the metarepo root. It is a marker — its
 - \`.worktrees/\` — git worktrees created for feature work (see Worktrees below). Gitignored.
 - \`metarepo.config.json\` — declares which repos are symlinked and which are cloned.
 - \`META-ROOT.md\` — root marker (above).
+- \`META-ARCH-PROMPT.md\` — ready-to-use prompt for an agent to generate \`META-ARCH.md\`, a cross-service architecture doc.
 
 ## Managed repos
 

@@ -62,6 +62,7 @@ check_symlink() {
 }
 
 check_file "$META/META-ROOT.md"
+check_file "$META/META-ARCH-PROMPT.md"
 check_file "$META/AGENTS.md"
 check_file "$META/CLAUDE.md"
 check_file "$META/README.md"

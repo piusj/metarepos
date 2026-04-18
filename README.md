@@ -74,6 +74,7 @@ Answer file shape:
 ├── AGENTS.md               # main agent-context doc
 ├── CLAUDE.md               # one-liner pointing to AGENTS.md
 ├── META-ROOT.md            # metarepo-root marker
+├── META-ARCH-PROMPT.md     # ready-to-use prompt for generating META-ARCH.md with your agent
 ├── README.md               # editable metarepo README
 ├── metarepo.config.json    # repo declarations
 └── .gitignore
