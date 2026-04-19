@@ -11,9 +11,7 @@ Frontend for the **greeting pipeline** demo. User types a name → web POSTs to 
 
 This spins up `fake-api` (port 3000), `fake-worker` (polling the API), and a static server for the web page (port 8080). Open http://localhost:8080.
 
-The script finds sibling services two ways:
-1. If run inside a metarepo (METAROOT.md ancestor found), it looks under `repos/fake-api` and `repos/fake-worker`.
-2. Otherwise it falls back to `../fake-api` and `../fake-worker` as sibling directories.
+The script resolves `fake-api` and `fake-worker` as sibling directories of `fake-web`. When launched through a metarepo's `repos/web` symlink, the kernel follows the symlink while resolving `..`, landing back in `samples/` — so the same logic works whether you launch from the samples directory directly or via a metarepo's `repos/web`.
 
 ## Ports
 

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Spins up fake-api + fake-worker + fake-web locally and opens the greeting pipeline demo.
-# Resolves fake-api / fake-worker paths relative to the metarepo (if run inside one)
-# or as sibling directories (if run from a standalone checkout of fake-web).
+# Resolves fake-api / fake-worker as sibling directories of fake-web.
+# When run via a metarepo's symlinked repos/web, the kernel follows the symlink
+# during `$HERE/../fake-api` resolution, landing in the samples/ parent — so
+# this works transparently whether you launch it from the samples directory
+# directly or through a metarepo's repos/web symlink.
 
 set -euo pipefail
 
@@ -12,14 +15,6 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 
 find_peer() {
   local name="$1"
-  local cur="$HERE"
-  while [ "$cur" != "/" ]; do
-    if [ -f "$cur/META-ROOT.md" ] && [ -d "$cur/repos/$name" ]; then
-      echo "$cur/repos/$name"
-      return 0
-    fi
-    cur=$(dirname "$cur")
-  done
   if [ -d "$HERE/../$name" ]; then
     echo "$(cd "$HERE/../$name" && pwd)"
     return 0
