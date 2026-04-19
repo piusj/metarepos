@@ -132,4 +132,4 @@ npm test
 
 ## License
 
-[The Unlicense](LICENSE) — public domain dedication. Use it however you like.
+[MIT](LICENSE)
