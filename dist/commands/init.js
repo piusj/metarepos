@@ -11,8 +11,8 @@ import { mergeConfig } from "../scripts/06-merge-config.js";
 import { writeGitStatusScript } from "../scripts/09-write-git-status-script.js";
 import { runGitInit } from "../scripts/07-run-git-init.js";
 import { runInitRepos } from "../scripts/08-run-init-repos.js";
-import { writeCodeWorkspace } from "../scripts/10-write-code-workspace.js";
-import { writeClaudeGitStatusCommand } from "../scripts/11-write-claude-git-status-command.js";
+import { writeClaudeGitStatusCommand } from "../scripts/10-write-claude-git-status-command.js";
+import { writeCodeWorkspace } from "../scripts/11-write-code-workspace.js";
 import { printBanner, printSummary } from "../lib/logger.js";
 async function readExistingRepoNames(metarepoPath) {
     const cfg = join(metarepoPath, "metarepo.config.json");
