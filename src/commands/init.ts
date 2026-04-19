@@ -13,6 +13,7 @@ import { writeGitStatusScript } from "../scripts/09-write-git-status-script.js";
 import { runGitInit } from "../scripts/07-run-git-init.js";
 import { runInitRepos } from "../scripts/08-run-init-repos.js";
 import { writeCodeWorkspace } from "../scripts/10-write-code-workspace.js";
+import { writeClaudeGitStatusCommand } from "../scripts/11-write-claude-git-status-command.js";
 import { printBanner, printSummary } from "../lib/logger.js";
 import type { WriteResult } from "../lib/skip-if-exists.js";
 
@@ -105,6 +106,15 @@ export async function runInitProgrammatic(args: InitProgrammaticInput): Promise<
           if (write.status === "created") ctx.createdCount++;
           else ctx.skippedCount++;
           task.title = `Install scripts/git-status.sh ${chalk.dim(`(${write.status})`)}`;
+        },
+      },
+      {
+        title: "Install .claude/commands/git-status.md",
+        task: async (ctx, task) => {
+          const { write } = await writeClaudeGitStatusCommand({ metarepoPath: ctx.metarepoPath });
+          if (write.status === "created") ctx.createdCount++;
+          else ctx.skippedCount++;
+          task.title = `Install .claude/commands/git-status.md ${chalk.dim(`(${write.status})`)}`;
         },
       },
       {
