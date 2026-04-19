@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { runInitInteractive } from "./commands/init.js";
 import chalk from "chalk";
+import { runInitInteractive } from "./commands/init.js";
 const [, , ...args] = process.argv;
 const sub = args[0];
 async function main() {

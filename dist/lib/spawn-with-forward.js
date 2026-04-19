@@ -14,22 +14,28 @@ export async function spawnWithForward(cmd, args, opts = {}) {
         });
         let exitCodeCapture = 0;
         child.on("error", rejectPromise);
-        child.on("exit", (code) => { exitCodeCapture = code ?? 0; });
+        child.on("exit", (code) => {
+            exitCodeCapture = code ?? 0;
+        });
         if (forward && child.stdout && child.stderr) {
             let outBuf = "";
             let errBuf = "";
             const onOut = (chunk) => {
                 outBuf += chunk.toString("utf8");
-                let idx;
-                while ((idx = outBuf.indexOf("\n")) >= 0) {
+                while (true) {
+                    const idx = outBuf.indexOf("\n");
+                    if (idx < 0)
+                        break;
                     forward(outBuf.slice(0, idx));
                     outBuf = outBuf.slice(idx + 1);
                 }
             };
             const onErr = (chunk) => {
                 errBuf += chunk.toString("utf8");
-                let idx;
-                while ((idx = errBuf.indexOf("\n")) >= 0) {
+                while (true) {
+                    const idx = errBuf.indexOf("\n");
+                    if (idx < 0)
+                        break;
                     forward(errBuf.slice(0, idx));
                     errBuf = errBuf.slice(idx + 1);
                 }

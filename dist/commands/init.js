@@ -1,19 +1,19 @@
-import { Listr } from "listr2";
-import chalk from "chalk";
-import { readFile, access } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import chalk from "chalk";
+import { Listr } from "listr2";
+import { printBanner, printSummary } from "../lib/logger.js";
 import { promptMetarepoName } from "../scripts/01-prompt-metarepo-name.js";
 import { promptRepos } from "../scripts/02-prompt-repos.js";
 import { createTargetDirectory } from "../scripts/03-create-target-directory.js";
 import { writeScaffoldFiles } from "../scripts/04-write-scaffold-files.js";
 import { writeInitReposScript } from "../scripts/05-write-init-repos-script.js";
 import { mergeConfig } from "../scripts/06-merge-config.js";
-import { writeGitStatusScript } from "../scripts/09-write-git-status-script.js";
 import { runGitInit } from "../scripts/07-run-git-init.js";
 import { runInitRepos } from "../scripts/08-run-init-repos.js";
+import { writeGitStatusScript } from "../scripts/09-write-git-status-script.js";
 import { writeClaudeGitStatusCommand } from "../scripts/10-write-claude-git-status-command.js";
 import { writeCodeWorkspace } from "../scripts/11-write-code-workspace.js";
-import { printBanner, printSummary } from "../lib/logger.js";
 async function readExistingRepoNames(metarepoPath) {
     const cfg = join(metarepoPath, "metarepo.config.json");
     try {
@@ -36,7 +36,7 @@ async function readExistingRepoNames(metarepoPath) {
 function countWrites(writes) {
     let c = 0, s = 0;
     for (const w of writes)
-        (w.status === "created" ? c++ : s++);
+        w.status === "created" ? c++ : s++;
     return [c, s];
 }
 export async function runInitProgrammatic(args) {
@@ -53,7 +53,9 @@ export async function runInitProgrammatic(args) {
         {
             title: "Create target directory",
             task: async (ctx, task) => {
-                const result = await createTargetDirectory({ metarepoPath: ctx.metarepoPath });
+                const result = await createTargetDirectory({
+                    metarepoPath: ctx.metarepoPath,
+                });
                 task.title = `Create target directory ${chalk.dim(ctx.metarepoPath)} ${chalk.dim(`(${result.status})`)}`;
                 if (result.status === "created")
                     ctx.createdCount++;
@@ -77,7 +79,9 @@ export async function runInitProgrammatic(args) {
         {
             title: "Install scripts/init-repos.mjs",
             task: async (ctx, task) => {
-                const { write } = await writeInitReposScript({ metarepoPath: ctx.metarepoPath });
+                const { write } = await writeInitReposScript({
+                    metarepoPath: ctx.metarepoPath,
+                });
                 if (write.status === "created")
                     ctx.createdCount++;
                 else
@@ -88,7 +92,9 @@ export async function runInitProgrammatic(args) {
         {
             title: "Install scripts/git-status.sh",
             task: async (ctx, task) => {
-                const { write } = await writeGitStatusScript({ metarepoPath: ctx.metarepoPath });
+                const { write } = await writeGitStatusScript({
+                    metarepoPath: ctx.metarepoPath,
+                });
                 if (write.status === "created")
                     ctx.createdCount++;
                 else
@@ -99,7 +105,9 @@ export async function runInitProgrammatic(args) {
         {
             title: "Install .claude/commands/git-status.md",
             task: async (ctx, task) => {
-                const { write } = await writeClaudeGitStatusCommand({ metarepoPath: ctx.metarepoPath });
+                const { write } = await writeClaudeGitStatusCommand({
+                    metarepoPath: ctx.metarepoPath,
+                });
                 if (write.status === "created")
                     ctx.createdCount++;
                 else
@@ -146,7 +154,9 @@ export async function runInitProgrammatic(args) {
             task: async (ctx, task) => {
                 const result = await runGitInit({
                     metarepoPath: ctx.metarepoPath,
-                    forward: (line) => { task.output = line; },
+                    forward: (line) => {
+                        task.output = line;
+                    },
                 });
                 if (result.status === "initialized")
                     ctx.createdCount++;
@@ -161,7 +171,9 @@ export async function runInitProgrammatic(args) {
             task: async (ctx, task) => {
                 const result = await runInitRepos({
                     metarepoPath: ctx.metarepoPath,
-                    forward: (line) => { task.output = line; },
+                    forward: (line) => {
+                        task.output = line;
+                    },
                 });
                 if (result.exitCode !== 0) {
                     throw new Error(`init-repos exited with code ${result.exitCode}`);

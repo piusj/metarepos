@@ -1,7 +1,7 @@
-import { confirm, input, select, checkbox } from "@inquirer/prompts";
-import chalk from "chalk";
 import { readdir } from "node:fs/promises";
 import { basename, relative, resolve } from "node:path";
+import { checkbox, confirm, input, select } from "@inquirer/prompts";
+import chalk from "chalk";
 export async function listSubdirs(dir) {
     try {
         const entries = await readdir(dir, { withFileTypes: true });
@@ -85,7 +85,7 @@ export async function promptRepos(args) {
                     const t = v.trim();
                     if (!t)
                         return "Name cannot be empty.";
-                    if (/[\/\\]/.test(t))
+                    if (/[/\\]/.test(t))
                         return "Name cannot contain slashes.";
                     if (/^\./.test(t))
                         return "Name cannot start with a dot.";
@@ -116,7 +116,7 @@ export async function promptRepos(args) {
                 console.log(chalk.yellow("  That path doesn't give a usable folder name; try again."));
                 continue;
             }
-            if (/[\/\\]/.test(derived)) {
+            if (/[/\\]/.test(derived)) {
                 console.log(chalk.yellow("  Derived name contains slashes; try again."));
                 continue;
             }

@@ -1,9 +1,9 @@
-import chalk from "chalk";
 import boxen from "boxen";
+import chalk from "chalk";
+import Table from "cli-table3";
 import figlet from "figlet";
 import gradient from "gradient-string";
 import logSymbols from "log-symbols";
-import Table from "cli-table3";
 const isTTY = process.stdout.isTTY === true;
 export function printBanner() {
     if (!isTTY) {
@@ -39,14 +39,28 @@ export function printSummary(s) {
     }
     const table = new Table({
         chars: {
-            top: "", "top-mid": "", "top-left": "", "top-right": "",
-            bottom: "", "bottom-mid": "", "bottom-left": "", "bottom-right": "",
-            left: "", "left-mid": "", mid: "", "mid-mid": "",
-            right: "", "right-mid": "", middle: " ",
+            top: "",
+            "top-mid": "",
+            "top-left": "",
+            "top-right": "",
+            bottom: "",
+            "bottom-mid": "",
+            "bottom-left": "",
+            "bottom-right": "",
+            left: "",
+            "left-mid": "",
+            mid: "",
+            "mid-mid": "",
+            right: "",
+            "right-mid": "",
+            middle: " ",
         },
         style: { "padding-left": 0, "padding-right": 2 },
     });
-    table.push([chalk.dim("Created"), chalk.green(String(s.created))], [chalk.dim("Skipped"), chalk.yellow(String(s.skipped))], [chalk.dim("Warnings"), s.warnings > 0 ? chalk.yellow(String(s.warnings)) : chalk.dim("0")], [chalk.dim("Time"), chalk.cyan(`${(s.elapsedMs / 1000).toFixed(2)}s`)]);
+    table.push([chalk.dim("Created"), chalk.green(String(s.created))], [chalk.dim("Skipped"), chalk.yellow(String(s.skipped))], [
+        chalk.dim("Warnings"),
+        s.warnings > 0 ? chalk.yellow(String(s.warnings)) : chalk.dim("0"),
+    ], [chalk.dim("Time"), chalk.cyan(`${(s.elapsedMs / 1000).toFixed(2)}s`)]);
     const body = table.toString() +
         "\n\n" +
         chalk.dim(`Edit ${chalk.bold("metarepo.config.json")} and re-run\n` +

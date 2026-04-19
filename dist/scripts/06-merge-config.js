@@ -1,4 +1,4 @@
-import { readFile, writeFile, access } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 async function fileExists(p) {
     try {
@@ -45,7 +45,7 @@ export async function mergeConfig(args) {
         taken.add(repo.name);
         addedCount++;
     }
-    await writeFile(configPath, JSON.stringify(config, null, 2) + "\n", "utf8");
+    await writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
     return {
         status: existed ? "merged" : "created",
         addedCount,

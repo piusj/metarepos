@@ -2,10 +2,10 @@ import { join } from "node:path";
 import { writeFileIfMissing } from "../lib/skip-if-exists.js";
 import { agentsMd } from "../templates/agents-md.js";
 import { claudeMd } from "../templates/claude-md.js";
-import { metaRootMd } from "../templates/meta-root-md.js";
-import { metaArchPromptMd } from "../templates/meta-arch-prompt-md.js";
-import { readmeMd } from "../templates/readme-md.js";
 import { gitignoreContent } from "../templates/gitignore.js";
+import { metaArchPromptMd } from "../templates/meta-arch-prompt-md.js";
+import { metaRootMd } from "../templates/meta-root-md.js";
+import { readmeMd } from "../templates/readme-md.js";
 export async function writeScaffoldFiles(args) {
     const { metarepoPath, name } = args;
     const writes = [];

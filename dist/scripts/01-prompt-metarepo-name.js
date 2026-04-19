@@ -1,7 +1,7 @@
-import { input } from "@inquirer/prompts";
-import chalk from "chalk";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { input } from "@inquirer/prompts";
+import chalk from "chalk";
 export async function promptMetarepoName(args) {
     console.log(chalk.cyan.bold("\nStep 1/3 — Name your metarepo"));
     console.log(chalk.dim("  This will be the directory name created in your current working directory."));
@@ -11,7 +11,7 @@ export async function promptMetarepoName(args) {
             const trimmed = value.trim();
             if (!trimmed)
                 return "Name cannot be empty.";
-            if (/[\/\\]/.test(trimmed))
+            if (/[/\\]/.test(trimmed))
                 return "Name cannot contain slashes.";
             if (/^\./.test(trimmed))
                 return "Name cannot start with a dot.";
