@@ -8,6 +8,9 @@ export function metaCodeWorkspace(name: string, repoNames: string[]): string {
       "files.exclude": { "repos": true },
       "search.exclude": { "repos": true },
       "files.watcherExclude": { "**/repos/**": true },
+      "git.autoRepositoryDetection": "subFolders",
+      "git.repositoryScanMaxDepth": 5,
+      "git.scanRepositories": [".worktrees"],
     },
   };
   return JSON.stringify(workspace, null, 2) + "\n";

@@ -13,6 +13,9 @@ test("metaCodeWorkspace produces valid JSON with metarepo root + one folder per 
   assert.equal(parsed.settings["files.exclude"].repos, true);
   assert.equal(parsed.settings["search.exclude"].repos, true);
   assert.equal(parsed.settings["files.watcherExclude"]["**/repos/**"], true);
+  assert.equal(parsed.settings["git.autoRepositoryDetection"], "subFolders");
+  assert.equal(parsed.settings["git.repositoryScanMaxDepth"], 5);
+  assert.deepEqual(parsed.settings["git.scanRepositories"], [".worktrees"]);
 });
 
 test("metaCodeWorkspace handles zero repos (just the metarepo root)", () => {

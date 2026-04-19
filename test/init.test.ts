@@ -32,9 +32,15 @@ test("init scaffolds a metarepo with symlinked samples", async () => {
     });
 
     // Files exist
-    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "META-ARCH-PROMPT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs", "scripts/git-status.sh"]) {
+    for (const f of ["AGENTS.md", "CLAUDE.md", "META-ROOT.md", "META-ARCH-PROMPT.md", "README.md", ".gitignore", "metarepo.config.json", "scripts/init-repos.mjs", "scripts/git-status.sh", ".claude/commands/git-status.md"]) {
       assert.ok(await exists(join(metaPath, f)), `missing ${f}`);
     }
+
+    // /git-status Claude command is installed and points at the status script
+    const cmdMd = await readFile(join(metaPath, ".claude/commands/git-status.md"), "utf8");
+    assert.match(cmdMd, /allowed-tools: Bash\(bash scripts\/git-status\.sh\)/);
+    assert.match(cmdMd, /META_ROOT.*META-ROOT\.md/);
+    assert.match(cmdMd, /bash "\$META_ROOT\/scripts\/git-status\.sh"/);
     assert.ok(await exists(join(metaPath, ".git")));
     assert.ok(await exists(join(metaPath, "repos/.gitkeep")));
 

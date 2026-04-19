@@ -75,6 +75,7 @@ if [ ! -x "$META/scripts/git-status.sh" ]; then
   echo "FAIL: scripts/git-status.sh not executable" >&2
   exit 1
 fi
+check_file "$META/.claude/commands/git-status.md"
 check_dir  "$META/.git"
 check_file "$META/repos/.gitkeep"
 
