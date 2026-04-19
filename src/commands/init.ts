@@ -195,6 +195,6 @@ export async function runInitInteractive(cwd: string): Promise<void> {
   printBanner();
   const { name, metarepoPath } = await promptMetarepoName({ cwd });
   const existingRepoNames = await readExistingRepoNames(metarepoPath);
-  const { repos } = await promptRepos({ existingRepoNames });
+  const { repos } = await promptRepos({ existingRepoNames, cwd, metarepoPath });
   await runInitProgrammatic({ cwd, name, repos });
 }
