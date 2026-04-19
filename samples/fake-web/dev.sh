@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Spins up fake-api + fake-worker + fake-web locally and opens the greeting pipeline demo.
-# Resolves fake-api / fake-worker as sibling directories of fake-web.
-# When run via a metarepo's symlinked repos/web, the kernel follows the symlink
-# during `$HERE/../fake-api` resolution, landing in the samples/ parent — so
-# this works transparently whether you launch it from the samples directory
-# directly or through a metarepo's repos/web symlink.
+#
+# Assumption: fake-api and fake-worker are siblings of fake-web using those exact
+# names. Works whether they're real directories (in the samples dir) or symlinks
+# with the fake-* name (in a metarepo that was scaffolded with those repo names).
+# If you want to run this inside a metarepo, symlink the samples as fake-api /
+# fake-web / fake-worker — not as api / web / worker.
 
 set -euo pipefail
 
@@ -12,18 +13,8 @@ API_PORT="${API_PORT:-3000}"
 WEB_PORT="${WEB_PORT:-8080}"
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-
-find_peer() {
-  local name="$1"
-  if [ -d "$HERE/../$name" ]; then
-    echo "$(cd "$HERE/../$name" && pwd)"
-    return 0
-  fi
-  return 1
-}
-
-API_DIR=$(find_peer "fake-api")    || { echo "error: could not locate fake-api" >&2; exit 1; }
-WORKER_DIR=$(find_peer "fake-worker") || { echo "error: could not locate fake-worker" >&2; exit 1; }
+API_DIR="$(cd "$HERE/../fake-api" 2>/dev/null && pwd)"    || { echo "error: expected sibling directory fake-api next to $HERE" >&2; exit 1; }
+WORKER_DIR="$(cd "$HERE/../fake-worker" 2>/dev/null && pwd)" || { echo "error: expected sibling directory fake-worker next to $HERE" >&2; exit 1; }
 
 echo "  api:    $API_DIR"
 echo "  worker: $WORKER_DIR"
