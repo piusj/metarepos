@@ -28,8 +28,8 @@ cat > answers.json <<JSON
 {
   "name": "e2e-meta",
   "repos": [
-    { "kind": "symlink", "name": "api", "path": "$SAMPLES_DIR/fake-api" },
-    { "kind": "symlink", "name": "web", "path": "$SAMPLES_DIR/fake-web" }
+    { "kind": "symlink", "name": "fake-api", "path": "$SAMPLES_DIR/fake-api" },
+    { "kind": "symlink", "name": "fake-web", "path": "$SAMPLES_DIR/fake-web" }
   ]
 }
 JSON
@@ -78,10 +78,10 @@ fi
 check_dir  "$META/.git"
 check_file "$META/repos/.gitkeep"
 
-check_symlink "$META/repos/api"
-check_symlink "$META/repos/web"
-check_file    "$META/repos/api/README.md"
-check_file    "$META/repos/web/README.md"
+check_symlink "$META/repos/fake-api"
+check_symlink "$META/repos/fake-web"
+check_file    "$META/repos/fake-api/README.md"
+check_file    "$META/repos/fake-web/README.md"
 
 if ! grep -q "root of the e2e-meta meta-repo" "$META/META-ROOT.md"; then
   echo "FAIL: META-ROOT.md does not contain interpolated name" >&2
