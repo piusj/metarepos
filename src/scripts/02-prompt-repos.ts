@@ -17,7 +17,7 @@ export type PromptReposResult = {
   repos: RepoEntry[];
 };
 
-async function listSubdirs(dir: string): Promise<string[]> {
+export async function listSubdirs(dir: string): Promise<string[]> {
   try {
     const entries = await readdir(dir, { withFileTypes: true });
     return entries
@@ -29,7 +29,7 @@ async function listSubdirs(dir: string): Promise<string[]> {
   }
 }
 
-function pathForConfig(metarepoPath: string, absolutePath: string): string {
+export function pathForConfig(metarepoPath: string, absolutePath: string): string {
   const rel = relative(metarepoPath, absolutePath);
   // On macOS/Linux relative() returns forward-slash paths; if it's absolute we
   // shouldn't happen to land here but guard anyway.

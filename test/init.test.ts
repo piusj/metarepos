@@ -136,3 +136,56 @@ test("init is idempotent on re-run", async () => {
     await rm(cwd, { recursive: true, force: true });
   }
 });
+
+test("init with zero repos produces a valid scaffold (no symlinks, empty clones)", async () => {
+  const cwd = await mkdtemp(join(tmpdir(), "mr-itest-"));
+  try {
+    await runInitProgrammatic({ cwd, name: "empty-meta", repos: [] });
+    const metaPath = join(cwd, "empty-meta");
+
+    assert.ok(await exists(join(metaPath, "AGENTS.md")));
+    assert.ok(await exists(join(metaPath, "META-ROOT.md")));
+    assert.ok(await exists(join(metaPath, "metarepo.config.json")));
+    assert.ok(await exists(join(metaPath, "meta.code-workspace")));
+    assert.ok(await exists(join(metaPath, ".git")));
+
+    const cfg = JSON.parse(await readFile(join(metaPath, "metarepo.config.json"), "utf8"));
+    assert.deepEqual(cfg.symlinks, []);
+    assert.deepEqual(cfg.clones, []);
+
+    const ws = JSON.parse(await readFile(join(metaPath, "meta.code-workspace"), "utf8"));
+    assert.equal(ws.folders.length, 1);
+    assert.equal(ws.folders[0].name, "empty-meta");
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
+});
+
+test("init sets main as the default branch in git init", async () => {
+  const cwd = await mkdtemp(join(tmpdir(), "mr-itest-"));
+  try {
+    await runInitProgrammatic({ cwd, name: "branch-meta", repos: [] });
+    const metaPath = join(cwd, "branch-meta");
+    const head = (await readFile(join(metaPath, ".git/HEAD"), "utf8")).trim();
+    assert.equal(head, "ref: refs/heads/main");
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
+});
+
+test("init-repos.mjs script is executable and includes the meta-root walk-up", async () => {
+  const cwd = await mkdtemp(join(tmpdir(), "mr-itest-"));
+  try {
+    await runInitProgrammatic({ cwd, name: "exec-meta", repos: [] });
+    const metaPath = join(cwd, "exec-meta");
+    const scriptPath = join(metaPath, "scripts/init-repos.mjs");
+    const { stat } = await import("node:fs/promises");
+    const s = await stat(scriptPath);
+    assert.ok((s.mode & 0o100) !== 0, "init-repos.mjs should be executable");
+    const src = await readFile(scriptPath, "utf8");
+    assert.match(src, /findMetarepoRoot/);
+    assert.match(src, /META-ROOT\.md/);
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
+});

@@ -2,7 +2,7 @@ import { confirm, input, select, checkbox } from "@inquirer/prompts";
 import chalk from "chalk";
 import { readdir } from "node:fs/promises";
 import { basename, relative, resolve } from "node:path";
-async function listSubdirs(dir) {
+export async function listSubdirs(dir) {
     try {
         const entries = await readdir(dir, { withFileTypes: true });
         return entries
@@ -14,7 +14,7 @@ async function listSubdirs(dir) {
         return [];
     }
 }
-function pathForConfig(metarepoPath, absolutePath) {
+export function pathForConfig(metarepoPath, absolutePath) {
     const rel = relative(metarepoPath, absolutePath);
     // On macOS/Linux relative() returns forward-slash paths; if it's absolute we
     // shouldn't happen to land here but guard anyway.
