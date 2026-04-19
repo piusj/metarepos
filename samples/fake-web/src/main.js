@@ -11,7 +11,7 @@ function setStatus(text, kind) {
 }
 
 function appendLog(line) {
-  $log.textContent += (line + "\n");
+  $log.textContent += `${line}\n`;
 }
 
 async function submit() {

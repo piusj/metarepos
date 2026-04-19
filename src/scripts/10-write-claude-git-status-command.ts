@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { writeFileIfMissing, type WriteResult } from "../lib/skip-if-exists.js";
+import { type WriteResult, writeFileIfMissing } from "../lib/skip-if-exists.js";
 import { claudeGitStatusCommandMd } from "../templates/claude-git-status-command-md.js";
 
 export type WriteClaudeGitStatusCommandInput = {

@@ -1,7 +1,7 @@
-import { confirm, input, select, checkbox } from "@inquirer/prompts";
-import chalk from "chalk";
 import { readdir } from "node:fs/promises";
 import { basename, relative, resolve } from "node:path";
+import { checkbox, confirm, input, select } from "@inquirer/prompts";
+import chalk from "chalk";
 
 export type RepoEntry =
   | { kind: "symlink"; name: string; path: string }
@@ -29,7 +29,10 @@ export async function listSubdirs(dir: string): Promise<string[]> {
   }
 }
 
-export function pathForConfig(metarepoPath: string, absolutePath: string): string {
+export function pathForConfig(
+  metarepoPath: string,
+  absolutePath: string,
+): string {
   const rel = relative(metarepoPath, absolutePath);
   // On macOS/Linux relative() returns forward-slash paths; if it's absolute we
   // shouldn't happen to land here but guard anyway.
@@ -67,7 +70,8 @@ export async function promptRepos(
     message:
       "Parent directory to scan for repos to symlink (relative to the current working directory):",
     default: ".",
-    validate: (v: string) => v.trim().length > 0 || "Directory cannot be empty.",
+    validate: (v: string) =>
+      v.trim().length > 0 || "Directory cannot be empty.",
   });
 
   const absoluteParent = resolve(args.cwd, parentInput.trim());
@@ -83,7 +87,8 @@ export async function promptRepos(
     );
   } else {
     const selected = await checkbox<string>({
-      message: "Select repos to symlink into repos/ (space to toggle, enter to confirm):",
+      message:
+        "Select repos to symlink into repos/ (space to toggle, enter to confirm):",
       choices: candidates.map((name) => ({
         name,
         value: name,
@@ -138,7 +143,7 @@ export async function promptRepos(
         validate: (v: string) => {
           const t = v.trim();
           if (!t) return "Name cannot be empty.";
-          if (/[\/\\]/.test(t)) return "Name cannot contain slashes.";
+          if (/[/\\]/.test(t)) return "Name cannot contain slashes.";
           if (/^\./.test(t)) return "Name cannot start with a dot.";
           if (taken.has(t)) return `Name "${t}" is already used.`;
           return true;
@@ -164,15 +169,25 @@ export async function promptRepos(
       const trimmed = entered.trim();
       const derived = basename(trimmed);
       if (!derived || derived === "." || derived === "..") {
-        console.log(chalk.yellow("  That path doesn't give a usable folder name; try again."));
+        console.log(
+          chalk.yellow(
+            "  That path doesn't give a usable folder name; try again.",
+          ),
+        );
         continue;
       }
-      if (/[\/\\]/.test(derived)) {
-        console.log(chalk.yellow("  Derived name contains slashes; try again."));
+      if (/[/\\]/.test(derived)) {
+        console.log(
+          chalk.yellow("  Derived name contains slashes; try again."),
+        );
         continue;
       }
       if (taken.has(derived)) {
-        console.log(chalk.yellow(`  Name "${derived}" is already used; pick a path with a different basename.`));
+        console.log(
+          chalk.yellow(
+            `  Name "${derived}" is already used; pick a path with a different basename.`,
+          ),
+        );
         continue;
       }
       symlinkName = derived;

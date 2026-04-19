@@ -3,13 +3,22 @@
   "version": "0.1.0",
   "description": "Scaffolder CLI for setting up a metarepo — a root folder grouping multiple repos with shared agent context.",
   "type": "module",
-  "bin": { "metarepos": "dist/cli.js" },
-  "files": ["dist", "README.md"],
+  "bin": {
+    "metarepos": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc && node -e \"import('node:fs').then(({default:fs})=>{const p='dist/cli.js';const s=fs.readFileSync(p,'utf8');if(!s.startsWith('#!'))fs.writeFileSync(p,'#!/usr/bin/env node\\n'+s);fs.chmodSync(p,0o755);})\"",
     "test": "npm run test:build && node --test dist-test/test/*.test.js",
     "test:build": "tsc -p tsconfig.test.json",
     "test:e2e": "bash test/e2e-npx.sh",
+    "check": "npm run check:ts && npm run check:biome",
+    "check:ts": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "check:biome": "biome check .",
+    "format": "biome check --write .",
     "deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
@@ -23,10 +32,13 @@
     "log-symbols": "^7.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.12",
     "@types/figlet": "^1.7.0",
     "@types/node": "^22.0.0",
     "typescript": "^5.6.0"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "license": "MIT"
 }

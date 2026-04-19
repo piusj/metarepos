@@ -1,4 +1,4 @@
-import { spawn, type SpawnOptions } from "node:child_process";
+import { type SpawnOptions, spawn } from "node:child_process";
 
 export type ForwardFn = (line: string) => void;
 
@@ -26,23 +26,27 @@ export async function spawnWithForward(
 
     let exitCodeCapture = 0;
     child.on("error", rejectPromise);
-    child.on("exit", (code) => { exitCodeCapture = code ?? 0; });
+    child.on("exit", (code) => {
+      exitCodeCapture = code ?? 0;
+    });
 
     if (forward && child.stdout && child.stderr) {
       let outBuf = "";
       let errBuf = "";
       const onOut = (chunk: Buffer) => {
         outBuf += chunk.toString("utf8");
-        let idx: number;
-        while ((idx = outBuf.indexOf("\n")) >= 0) {
+        while (true) {
+          const idx = outBuf.indexOf("\n");
+          if (idx < 0) break;
           forward(outBuf.slice(0, idx));
           outBuf = outBuf.slice(idx + 1);
         }
       };
       const onErr = (chunk: Buffer) => {
         errBuf += chunk.toString("utf8");
-        let idx: number;
-        while ((idx = errBuf.indexOf("\n")) >= 0) {
+        while (true) {
+          const idx = errBuf.indexOf("\n");
+          if (idx < 0) break;
           forward(errBuf.slice(0, idx));
           errBuf = errBuf.slice(idx + 1);
         }

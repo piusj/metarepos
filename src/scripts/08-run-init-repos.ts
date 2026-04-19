@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { spawnWithForward, type ForwardFn } from "../lib/spawn-with-forward.js";
+import { type ForwardFn, spawnWithForward } from "../lib/spawn-with-forward.js";
 
 export type RunInitReposInput = {
   metarepoPath: string;

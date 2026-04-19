@@ -1,9 +1,9 @@
-import chalk from "chalk";
 import boxen from "boxen";
+import chalk from "chalk";
+import Table from "cli-table3";
 import figlet from "figlet";
 import gradient from "gradient-string";
 import logSymbols from "log-symbols";
-import Table from "cli-table3";
 
 const isTTY = process.stdout.isTTY === true;
 
@@ -31,11 +31,15 @@ export function error(msg: string): void {
 }
 
 export function created(path: string): void {
-  console.log(`  ${chalk.green(logSymbols.success)} ${chalk.bold(path)} ${chalk.dim("(created)")}`);
+  console.log(
+    `  ${chalk.green(logSymbols.success)} ${chalk.bold(path)} ${chalk.dim("(created)")}`,
+  );
 }
 
 export function skipped(path: string, reason = "exists"): void {
-  console.log(`  ${chalk.yellow("○")} ${chalk.bold(path)} ${chalk.dim(`(skip: ${reason})`)}`);
+  console.log(
+    `  ${chalk.yellow("○")} ${chalk.bold(path)} ${chalk.dim(`(skip: ${reason})`)}`,
+  );
 }
 
 export type Summary = {
@@ -52,22 +56,38 @@ export function printSummary(s: Summary): void {
       `Summary: created=${s.created} skipped=${s.skipped} warnings=${s.warnings} time=${(s.elapsedMs / 1000).toFixed(2)}s`,
     );
     console.log(`Metarepo: ${s.metarepoPath}`);
-    console.log("Edit metarepo.config.json and re-run node scripts/init-repos.mjs any time — it's idempotent.");
+    console.log(
+      "Edit metarepo.config.json and re-run node scripts/init-repos.mjs any time — it's idempotent.",
+    );
     return;
   }
   const table = new Table({
     chars: {
-      top: "", "top-mid": "", "top-left": "", "top-right": "",
-      bottom: "", "bottom-mid": "", "bottom-left": "", "bottom-right": "",
-      left: "", "left-mid": "", mid: "", "mid-mid": "",
-      right: "", "right-mid": "", middle: " ",
+      top: "",
+      "top-mid": "",
+      "top-left": "",
+      "top-right": "",
+      bottom: "",
+      "bottom-mid": "",
+      "bottom-left": "",
+      "bottom-right": "",
+      left: "",
+      "left-mid": "",
+      mid: "",
+      "mid-mid": "",
+      right: "",
+      "right-mid": "",
+      middle: " ",
     },
     style: { "padding-left": 0, "padding-right": 2 },
   });
   table.push(
     [chalk.dim("Created"), chalk.green(String(s.created))],
     [chalk.dim("Skipped"), chalk.yellow(String(s.skipped))],
-    [chalk.dim("Warnings"), s.warnings > 0 ? chalk.yellow(String(s.warnings)) : chalk.dim("0")],
+    [
+      chalk.dim("Warnings"),
+      s.warnings > 0 ? chalk.yellow(String(s.warnings)) : chalk.dim("0"),
+    ],
     [chalk.dim("Time"), chalk.cyan(`${(s.elapsedMs / 1000).toFixed(2)}s`)],
   );
 
@@ -97,9 +117,15 @@ export function printNextSteps(metarepoPath: string): void {
   const workspacePath = `${metarepoPath}/meta.code-workspace`;
   if (!isTTY) {
     console.log(`Next:`);
-    console.log(`  1. Open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify the result as needed.`);
-    console.log(`  2. In Claude Code, run /git-status for a cross-repo status report (branches, ahead/behind, uncommitted changes, worktrees). A .claude/commands/git-status.md is pre-installed — you can pass free-form context like "/git-status which repos are behind?" to focus the summary. Outside Claude: bash scripts/git-status.sh.`);
-    console.log(`  3. Open ${workspacePath} in VSCode (\`code ${workspacePath}\` or File → Open Workspace from File…) for a multi-root view. Benefits: cleaner VSCode UI without affecting what the agent sees, per-folder include/exclude tuning (e.g. index only frontend or only backend), and a clear separation of VSCode's view vs the agent's view.`);
+    console.log(
+      `  1. Open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify the result as needed.`,
+    );
+    console.log(
+      `  2. In Claude Code, run /git-status for a cross-repo status report (branches, ahead/behind, uncommitted changes, worktrees). A .claude/commands/git-status.md is pre-installed — you can pass free-form context like "/git-status which repos are behind?" to focus the summary. Outside Claude: bash scripts/git-status.sh.`,
+    );
+    console.log(
+      `  3. Open ${workspacePath} in VSCode (\`code ${workspacePath}\` or File → Open Workspace from File…) for a multi-root view. Benefits: cleaner VSCode UI without affecting what the agent sees, per-folder include/exclude tuning (e.g. index only frontend or only backend), and a clear separation of VSCode's view vs the agent's view.`,
+    );
     return;
   }
   console.log(

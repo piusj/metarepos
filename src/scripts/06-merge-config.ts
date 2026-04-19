@@ -1,4 +1,4 @@
-import { readFile, writeFile, access } from "node:fs/promises";
+import { access, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { RepoEntry } from "./02-prompt-repos.js";
 
@@ -24,7 +24,12 @@ export type MergeConfigResult = {
 };
 
 async function fileExists(p: string): Promise<boolean> {
-  try { await access(p); return true; } catch { return false; }
+  try {
+    await access(p);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function mergeConfig(
@@ -68,7 +73,7 @@ export async function mergeConfig(
     addedCount++;
   }
 
-  await writeFile(configPath, JSON.stringify(config, null, 2) + "\n", "utf8");
+  await writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
 
   return {
     status: existed ? "merged" : "created",

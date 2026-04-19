@@ -1,6 +1,6 @@
 import { access } from "node:fs/promises";
 import { join } from "node:path";
-import { spawnWithForward, type ForwardFn } from "../lib/spawn-with-forward.js";
+import { type ForwardFn, spawnWithForward } from "../lib/spawn-with-forward.js";
 
 export type RunGitInitInput = {
   metarepoPath: string;
@@ -12,7 +12,12 @@ export type RunGitInitResult = {
 };
 
 async function hasGitDir(p: string): Promise<boolean> {
-  try { await access(join(p, ".git")); return true; } catch { return false; }
+  try {
+    await access(join(p, ".git"));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function runGitInit(

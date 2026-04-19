@@ -1,5 +1,5 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
+import { test } from "node:test";
 import { spawnWithForward } from "../src/lib/spawn-with-forward.js";
 
 test("spawnWithForward captures exit code 0", async () => {

@@ -1,8 +1,8 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { test } from "node:test";
 import { listSubdirs, pathForConfig } from "../src/scripts/02-prompt-repos.js";
 
 test("listSubdirs returns sorted directory names", async () => {

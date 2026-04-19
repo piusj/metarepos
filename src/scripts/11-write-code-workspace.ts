@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { writeFileIfMissing, type WriteResult } from "../lib/skip-if-exists.js";
+import { type WriteResult, writeFileIfMissing } from "../lib/skip-if-exists.js";
 import { metaCodeWorkspace } from "../templates/meta-code-workspace.js";
 
 export type WriteCodeWorkspaceInput = {
@@ -26,6 +26,9 @@ export async function writeCodeWorkspace(
     ...(config.clones ?? []).map((e) => e.name),
   ];
   const target = join(args.metarepoPath, "meta.code-workspace");
-  const write = await writeFileIfMissing(target, metaCodeWorkspace(args.name, repoNames));
+  const write = await writeFileIfMissing(
+    target,
+    metaCodeWorkspace(args.name, repoNames),
+  );
   return { write };
 }

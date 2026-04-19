@@ -5,7 +5,7 @@ async function processPending() {
   let res;
   try {
     res = await fetch(`${apiUrl}/tasks/pending`);
-  } catch (err) {
+  } catch {
     return; // API not up yet; try again next tick
   }
   if (!res.ok) return;
@@ -22,7 +22,9 @@ async function processPending() {
         body: JSON.stringify({ result }),
       });
     } catch (err) {
-      console.log(`[fake-worker] failed to post result for ${task.id}: ${err.message}`);
+      console.log(
+        `[fake-worker] failed to post result for ${task.id}: ${err.message}`,
+      );
     }
   }
 }

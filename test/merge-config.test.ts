@@ -1,8 +1,8 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { test } from "node:test";
 import { mergeConfig } from "../src/scripts/06-merge-config.js";
 
 test("mergeConfig writes new config when none exists", async () => {
@@ -23,7 +23,9 @@ test("mergeConfig writes new config when none exists", async () => {
     );
     assert.equal(written.name, "my-repo");
     assert.deepEqual(written.symlinks, [{ name: "a", path: "../local/a" }]);
-    assert.deepEqual(written.clones, [{ name: "b", url: "git@github.com:o/b.git" }]);
+    assert.deepEqual(written.clones, [
+      { name: "b", url: "git@github.com:o/b.git" },
+    ]);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
@@ -59,7 +61,9 @@ test("mergeConfig preserves existing entries and appends new ones", async () => 
       { name: "a", path: "../orig-a" },
       { name: "c", path: "../local/c" },
     ]);
-    assert.deepEqual(written.clones, [{ name: "b", url: "git@github.com:o/b.git" }]);
+    assert.deepEqual(written.clones, [
+      { name: "b", url: "git@github.com:o/b.git" },
+    ]);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

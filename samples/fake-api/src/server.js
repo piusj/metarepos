@@ -1,5 +1,5 @@
-import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
+import { createServer } from "node:http";
 
 const port = Number(process.env.PORT ?? 3000);
 const tasks = new Map(); // id -> { status: "pending"|"done", name, result?, createdAt, completedAt? }
@@ -31,7 +31,11 @@ const server = createServer(async (req, res) => {
 
   // Health check
   if (req.method === "GET" && req.url === "/health") {
-    return send(res, 200, { status: "ok", service: "fake-api", pending: [...tasks.values()].filter((t) => t.status === "pending").length });
+    return send(res, 200, {
+      status: "ok",
+      service: "fake-api",
+      pending: [...tasks.values()].filter((t) => t.status === "pending").length,
+    });
   }
 
   // Enqueue a greet task
@@ -41,7 +45,11 @@ const server = createServer(async (req, res) => {
       return send(res, 400, { error: "name required" });
     }
     const id = randomUUID();
-    tasks.set(id, { status: "pending", name: body.name.trim(), createdAt: Date.now() });
+    tasks.set(id, {
+      status: "pending",
+      name: body.name.trim(),
+      createdAt: Date.now(),
+    });
     console.log(`[fake-api] enqueued task ${id} for "${body.name.trim()}"`);
     return send(res, 202, { taskId: id });
   }
@@ -55,7 +63,7 @@ const server = createServer(async (req, res) => {
   }
 
   // /tasks/:id or /tasks/:id/result
-  const m = req.url && req.url.match(/^\/tasks\/([^/]+)(\/result)?$/);
+  const m = req.url?.match(/^\/tasks\/([^/]+)(\/result)?$/);
   if (m) {
     const id = m[1];
     const task = tasks.get(id);

@@ -1,6 +1,6 @@
 import { chmod } from "node:fs/promises";
 import { join } from "node:path";
-import { writeFileIfMissing, type WriteResult } from "../lib/skip-if-exists.js";
+import { type WriteResult, writeFileIfMissing } from "../lib/skip-if-exists.js";
 import { gitStatusSh } from "../templates/git-status-sh.js";
 
 export type WriteGitStatusScriptInput = {
