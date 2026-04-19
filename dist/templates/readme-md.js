@@ -41,13 +41,21 @@ Edit \`metarepo.config.json\` to add or remove repos, then re-run the command. I
 
 ## Git status across all repos
 
+A \`/git-status\` Claude Code command is pre-installed at \`.claude/commands/git-status.md\`. Inside a Claude Code session rooted anywhere in the metarepo, run:
+
+\`\`\`
+/git-status
+\`\`\`
+
+You can pass free-form context after the command — e.g. \`/git-status which repos are behind?\` — and Claude will focus its summary on that question.
+
+The command wraps \`scripts/git-status.sh\`, which you can also run directly from any shell:
+
 \`\`\`bash
 bash scripts/git-status.sh
 \`\`\`
 
-Prints a colour-coded summary of each repo under \`repos/\` plus any active worktrees under \`.worktrees/\`: current branch, ahead/behind upstream, staged/modified/untracked counts. Useful for checking the state of coordinated cross-repo work at a glance.
-
-**Tip:** If you're using Claude Code, you can turn this script into a skill by creating \`.claude/skills/metarepo-git-status/SKILL.md\` that invokes \`bash scripts/git-status.sh\` — then just say "check git status" to trigger it.
+Prints a colour-coded summary of each repo under \`repos/\` plus any active worktrees under \`.worktrees/\`: current branch, ahead/behind upstream, staged/modified/untracked counts.
 
 ## Open in VSCode
 

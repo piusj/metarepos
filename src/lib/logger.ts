@@ -94,12 +94,11 @@ export function printSummary(s: Summary): void {
 
 export function printNextSteps(metarepoPath: string): void {
   const promptPath = `${metarepoPath}/META-ARCH-PROMPT.md`;
-  const statusPath = `${metarepoPath}/scripts/git-status.sh`;
   const workspacePath = `${metarepoPath}/meta.code-workspace`;
   if (!isTTY) {
     console.log(`Next:`);
     console.log(`  1. Open ${promptPath} and give it to your coding agent to map out how your services fit together. Modify the result as needed.`);
-    console.log(`  2. Run ${statusPath} any time for a cross-repo git status report (branches + worktrees). Tip: wrap it as a Claude Code skill under .claude/skills/metarepo-git-status/ so "check git status" triggers it.`);
+    console.log(`  2. In Claude Code, run /git-status for a cross-repo status report (branches, ahead/behind, uncommitted changes, worktrees). A .claude/commands/git-status.md is pre-installed — you can pass free-form context like "/git-status which repos are behind?" to focus the summary. Outside Claude: bash scripts/git-status.sh.`);
     console.log(`  3. Open ${workspacePath} in VSCode (\`code ${workspacePath}\` or File → Open Workspace from File…) for a multi-root view. Benefits: cleaner VSCode UI without affecting what the agent sees, per-folder include/exclude tuning (e.g. index only frontend or only backend), and a clear separation of VSCode's view vs the agent's view.`);
     return;
   }
@@ -110,10 +109,11 @@ export function printNextSteps(metarepoPath: string): void {
       `  ${chalk.cyan("1.")} Open ${chalk.bold("META-ARCH-PROMPT.md")} and give it to your coding agent\n` +
       `     to map out how your services fit together. Modify the result as needed.\n` +
       "\n" +
-      `  ${chalk.cyan("2.")} Run ${chalk.bold("bash scripts/git-status.sh")} any time for a cross-repo\n` +
-      `     git status report — branches, ahead/behind, uncommitted changes, and worktrees.\n` +
-      `     ${chalk.dim("Tip: wrap it as a Claude Code skill at ")}${chalk.bold(".claude/skills/metarepo-git-status/")}${chalk.dim(" so")}\n` +
-      `     ${chalk.dim(`\"check git status\" triggers it automatically.`)}` +
+      `  ${chalk.cyan("2.")} In Claude Code, run ${chalk.bold("/git-status")} for a cross-repo status report\n` +
+      `     — branches, ahead/behind, uncommitted changes, and worktrees.\n` +
+      `     ${chalk.dim("A ")}${chalk.bold(".claude/commands/git-status.md")}${chalk.dim(" is pre-installed; pass free-form")}\n` +
+      `     ${chalk.dim("context like ")}${chalk.bold("/git-status which repos are behind?")}${chalk.dim(" to focus the summary.")}\n` +
+      `     ${chalk.dim("Outside Claude: ")}${chalk.bold("bash scripts/git-status.sh")}${chalk.dim(".")}` +
       "\n\n" +
       `  ${chalk.cyan("3.")} Open ${chalk.bold("meta.code-workspace")} in VSCode:\n` +
       `     ${chalk.dim("$")} ${chalk.bold(`code ${workspacePath}`)}\n` +

@@ -67,18 +67,20 @@ Answer file shape:
 
 ```
 <name>/
-├── repos/                  # target for clones and symlinks
-├── docs/                   # shared context, plans, designs
+├── repos/                        # target for clones and symlinks
+├── docs/                         # shared context, plans, designs
 ├── scripts/
-│   ├── init-repos.mjs      # idempotent materializer (re-run any time)
-│   └── git-status.sh       # cross-repo git status report (branches + worktrees)
-├── AGENTS.md               # main agent-context doc
-├── CLAUDE.md               # one-liner pointing to AGENTS.md
-├── META-ROOT.md            # metarepo-root marker
-├── META-ARCH-PROMPT.md     # ready-to-use prompt for generating META-ARCH.md with your agent
-├── README.md               # editable metarepo README
-├── metarepo.config.json    # repo declarations
-├── meta.code-workspace     # VSCode multi-root workspace (one folder per repo)
+│   ├── init-repos.mjs            # idempotent materializer (re-run any time)
+│   └── git-status.sh             # cross-repo git status report (branches + worktrees)
+├── .claude/commands/
+│   └── git-status.md             # pre-installed `/git-status` Claude Code command
+├── AGENTS.md                     # main agent-context doc
+├── CLAUDE.md                     # one-liner pointing to AGENTS.md
+├── META-ROOT.md                  # metarepo-root marker
+├── META-ARCH-PROMPT.md           # ready-to-use prompt for generating META-ARCH.md with your agent
+├── README.md                     # editable metarepo README
+├── metarepo.config.json          # repo declarations
+├── meta.code-workspace           # VSCode multi-root workspace (one folder per repo)
 └── .gitignore
 ```
 
@@ -94,15 +96,21 @@ The script only touches missing entries under `repos/`. It will never overwrite 
 
 ## Git status across all repos
 
-From anywhere inside the metarepo, run:
+A `/git-status` Claude Code command is pre-installed at `.claude/commands/git-status.md`. Inside a Claude Code session rooted anywhere in the metarepo, run:
+
+```
+/git-status
+```
+
+You can pass free-form context after the command — e.g. `/git-status which repos are behind?` — and Claude will focus its summary on that question.
+
+The command wraps [`scripts/git-status.sh`](scripts/git-status.sh), which you can also run directly from any shell:
 
 ```bash
 bash scripts/git-status.sh
 ```
 
-It prints a colour-coded summary of each repo under `repos/` plus any active worktrees under `.worktrees/` — current branch, ahead/behind upstream, staged/modified/untracked counts. Great for checking the state of coordinated cross-repo work at a glance.
-
-**Tip:** If you use Claude Code, you can wrap this script as a skill by adding `.claude/skills/metarepo-git-status/SKILL.md` that invokes `bash scripts/git-status.sh`. Then a simple "check git status" prompt will trigger it.
+It prints a colour-coded summary of each repo under `repos/` plus any active worktrees under `.worktrees/` — current branch, ahead/behind upstream, staged/modified/untracked counts.
 
 ## Open in VSCode
 
