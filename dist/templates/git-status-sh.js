@@ -16,11 +16,14 @@ find_meta_root() {
   return 1
 }
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 ROOT_DIR=$(find_meta_root "$SCRIPT_DIR") || {
   echo "Error: could not find META-ROOT.md walking up from $SCRIPT_DIR" >&2
   exit 1
 }
+# Resolve to canonical path so comparisons match git's own path reporting
+# (on macOS /var/folders symlinks to /private/var/folders, etc.)
+ROOT_DIR="$(cd "$ROOT_DIR" && pwd -P)"
 
 REPOS_DIR="$ROOT_DIR/repos"
 
@@ -35,16 +38,25 @@ RESET='\\033[0m'
 printf "\${BOLD}Git status for metarepo at %s\${RESET}\\n\\n" "$ROOT_DIR"
 
 dirs_to_check=()
+non_git_entries=()
 [ -d "$ROOT_DIR/.git" ] && dirs_to_check+=("$ROOT_DIR")
 if [ -d "$REPOS_DIR" ]; then
+  shopt -s nullglob
   for d in "$REPOS_DIR"/*/; do
-    [ -e "$d/.git" ] || continue
-    dirs_to_check+=("\${d%/}")
+    entry="\${d%/}"
+    # Skip the .gitkeep placeholder (it's a file, not a directory)
+    [ "$(basename "$entry")" = ".gitkeep" ] && continue
+    if [ -e "$entry/.git" ]; then
+      dirs_to_check+=("$entry")
+    else
+      non_git_entries+=("$entry")
+    fi
   done
+  shopt -u nullglob
 fi
 
-if [ "\${#dirs_to_check[@]}" -eq 0 ]; then
-  printf "\${YELLOW}No git repositories found under %s\${RESET}\\n" "$REPOS_DIR"
+if [ "\${#dirs_to_check[@]}" -eq 0 ] && [ "\${#non_git_entries[@]}" -eq 0 ]; then
+  printf "\${YELLOW}No entries found under %s\${RESET}\\n" "$REPOS_DIR"
   exit 0
 fi
 
@@ -141,11 +153,25 @@ for dir in "\${dirs_to_check[@]}"; do
   fi
 done
 
+non_git_count=0
+if [ "\${#non_git_entries[@]}" -gt 0 ]; then
+  for entry in "\${non_git_entries[@]}"; do
+    non_git_count=$((non_git_count + 1))
+    total=$((total + 1))
+    name=$(basename "$entry")
+    printf "  \${YELLOW}⚠\${RESET}  %-35s \${DIM}not a git repo — run 'git init' inside repos/%s\${RESET}\\n" "$name" "$name"
+  done
+fi
+
 behind_summary=""
 if [ "$behind_count" -gt 0 ]; then
   behind_summary=", \${RED}$behind_count behind upstream\${RESET}"
 fi
-printf "\\n\${BOLD}Summary:\${RESET} %d repos — \${GREEN}%d clean\${RESET}, \${YELLOW}%d with changes\${RESET}%b\\n" "$total" "$clean" "$dirty" "$behind_summary"
+non_git_summary=""
+if [ "$non_git_count" -gt 0 ]; then
+  non_git_summary=", \${YELLOW}$non_git_count not a git repo\${RESET}"
+fi
+printf "\\n\${BOLD}Summary:\${RESET} %d entries — \${GREEN}%d clean\${RESET}, \${YELLOW}%d with changes\${RESET}%b%b\\n" "$total" "$clean" "$dirty" "$behind_summary" "$non_git_summary"
 
 worktree_count=0
 worktree_output=""
