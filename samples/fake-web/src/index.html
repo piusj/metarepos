@@ -2,11 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>fake-web</title>
+    <title>fake-web · greeting pipeline</title>
+    <style>
+      body { font-family: system-ui, -apple-system, sans-serif; max-width: 42em; margin: 2em auto; padding: 0 1em; color: #222; }
+      h1 { font-size: 1.4em; margin-bottom: 0.2em; }
+      p.lead { color: #666; }
+      .card { border: 1px solid #e1e1e1; border-radius: 6px; padding: 1em 1.2em; margin: 1em 0; background: #fafafa; }
+      input, button { font-size: 1em; padding: 0.5em 0.7em; border: 1px solid #ccc; border-radius: 4px; }
+      input { width: 14em; }
+      button { margin-left: 0.4em; cursor: pointer; background: #0a7; color: white; border-color: #086; }
+      button:hover { background: #086; }
+      .log { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85em; color: #555; white-space: pre-wrap; margin-top: 0.6em; }
+      .status { font-weight: 600; }
+      .status.waiting { color: #888; }
+      .status.pending { color: #a70; }
+      .status.done { color: #0a7; }
+      .status.err { color: #c33; }
+    </style>
   </head>
   <body>
-    <h1>fake-web</h1>
-    <p id="status">checking…</p>
+    <h1>Greeting pipeline</h1>
+    <p class="lead">One name → three services talking to each other. Web posts to API, the worker picks it up and answers, web renders the result.</p>
+
+    <div class="card">
+      <label for="name">Your name: </label>
+      <input id="name" placeholder="pius" autocomplete="off" />
+      <button id="submit">Greet me</button>
+    </div>
+
+    <div class="card">
+      <div id="status" class="status waiting">waiting for input…</div>
+      <div id="log" class="log"></div>
+    </div>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>
