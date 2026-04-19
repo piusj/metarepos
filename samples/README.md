@@ -1,6 +1,6 @@
 # Test fixtures
 
-These directories are not production repos — they're tiny fixtures used by the integration test at `test/init.test.ts` and by the workshop demo under `samples/workshop/`. Excluded from `npm pack` via `.npmignore`.
+These directories are not production repos — they're tiny fixtures used by the integration test at `test/init.test.ts` and by the workshop demo under `workshop/` (at the repo root). Excluded from `npm pack` via `.npmignore`.
 
 ## Contents
 
